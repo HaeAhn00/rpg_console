@@ -19,7 +19,7 @@ class Game {
     while (character.health > 0 && killcount < totalMonsters) {
       Monster monster = getRandomMonster();
       print('\n새로운 몬스터가 등장 !!');
-      monster.showStatus();
+      monster.showState();
 
       battle(monster);
 
@@ -53,7 +53,7 @@ class Game {
   void battle(Monster monster) {
     while (character.health > 0 && monster.health > 0) {
       character.showState();
-      monster.showStatus();
+      monster.showState();
 
       // print('행동을 선택하세요: (1) 공격하기  (2) 방어하기');
       stdout.write('행동을 선택하세요: ( (1) 공격하기  (2) 방어하기) 선택: ');
@@ -61,7 +61,7 @@ class Game {
 
       switch (input) {
         case '1':
-          character.attackMonster(monster);
+          character.attack(monster);
           break;
         case '2':
           character.defend(monster.attack_p);
@@ -72,7 +72,7 @@ class Game {
       }
 
       if (monster.health > 0) {
-        monster.attackCharacter(character);
+        monster.attack(character);
       }
     }
 
