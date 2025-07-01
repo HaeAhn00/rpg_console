@@ -1,5 +1,16 @@
-// import 'package:rpg_console/rpg_console.dart' as rpg_console;
+import 'package:rpg_console/character.dart';
+import 'package:rpg_console/game.dart';
+import 'package:rpg_console/monster.dart';
+// import 'dart:io';
 
-// void main(List<String> arguments) {
-//   print('Hello world: ${rpg_console.calculate()}!');
-// }
+void main() {
+  // 캐릭터 정보 불러오기
+  Character character = Character.loadCharacterStats();
+
+  // 몬스터 리스트 불러오기
+  List<Monster> monsters = Monster.loadMonstersFromFile();
+
+  // 게임 시작
+  Game game = Game(character, monsters);
+  game.startGame();
+}

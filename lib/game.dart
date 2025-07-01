@@ -8,16 +8,17 @@ class Game {
   Character character;
   List<Monster> monsterList;
   int killcount = 0;
+  late int totalMonsters = monsterList.length;
 
   Game(this.character, this.monsterList);
 
   void startGame() {
-    print('Game Start!');
+    print('Game Start!\n');
     character.showState();
 
-    while (character.health > 0 && killcount < monsterList.length) {
+    while (character.health > 0 && killcount < totalMonsters) {
       Monster monster = getRandomMonster();
-      print('새로운 몬스터가 등장 !!');
+      print('\n새로운 몬스터가 등장 !!');
       monster.showStatus();
 
       battle(monster);
@@ -28,17 +29,22 @@ class Game {
       }
 
       killcount++;
-      print('몬스터 처치 완료! ${killcount}/${monsterList.length}');
+      print('${monster.name} 처치 완료!! ${killcount}/${totalMonsters}');
 
-      if (killcount == monsterList.length) {
+      if (killcount == totalMonsters) {
         print('모든 몬스터 처지 완료! Game Clear!');
         return;
       }
 
-      stdout.write('다음 몬스터와 대결하시겠습니까? (Y/N) : ');
+      stdout.write('\n다음 몬스터와 대결하시겠습니까? (y/n) : ');
       String? answer = stdin.readLineSync();
-      if (answer == 'N') {
+      if (answer == 'n') {
         print('게임 종료');
+        stdout.write('용사님 결과를 저장하시겠습니까? (y/n) : ');
+        String? saveAnswer = stdin.readLineSync();
+        if (saveAnswer?.toLowerCase() == 'y') {
+          saveResult("중도 종료", character);
+        }
         return;
       }
     }
@@ -49,8 +55,8 @@ class Game {
       character.showState();
       monster.showStatus();
 
-      print('행동을 선택하세요: (1) 공격하기  (2) 방어하기');
-      stdout.write('선택: ');
+      // print('행동을 선택하세요: (1) 공격하기  (2) 방어하기');
+      stdout.write('행동을 선택하세요: ( (1) 공격하기  (2) 방어하기) 선택: ');
       String? input = stdin.readLineSync();
 
       switch (input) {
@@ -75,5 +81,13 @@ class Game {
 
   Monster getRandomMonster() {
     return monsterList[Random().nextInt(monsterList.length)];
+  }
+
+  void saveResult(String result, Character character) {
+    final file = File('result.txt');
+    final content =
+        '캐릭터 이름: ${character.name}\n남은 체력: ${character.health}\n게임 결과: $result\n';
+    file.writeAsStringSync(content);
+    print('결과가 result.txt에 저장되었습니다.');
   }
 }

@@ -1,0 +1,3 @@
+RingRing,30,20
+RockMan,40,30
+Yeonto,50,20
