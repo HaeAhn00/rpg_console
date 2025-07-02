@@ -48,6 +48,21 @@ class Game {
 
       if (killcount == totalMonsters) {
         print('모든 몬스터 처지 완료! Game Clear!');
+
+        while (true) {
+          stdout.write('용사님 결과를 저장하시겠습니까? (y/n) : ');
+          String? answer = stdin.readLineSync();
+          if (answer == 'y') {
+            saveResult('승리', character);
+            break;
+          } else if (answer == 'n') {
+            print('저장하지 않고 게임을 종료합니다.');
+            break;
+          } else {
+            print('y 또는 n만 입력해주세요!!');
+          }
+        }
+
         return;
       }
 
