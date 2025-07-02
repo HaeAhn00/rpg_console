@@ -13,13 +13,14 @@ class Game {
   Game(this.character, this.monsterList);
 
   void startGame() {
-    print('Game Start!\n');
+    print('Game Start!');
     character.showState();
 
     while (character.health > 0 && killcount < totalMonsters) {
       Monster monster = getRandomMonster();
       print('\n새로운 몬스터가 등장 !!');
       monster.showState();
+      // print('\n');
 
       battle(monster);
 
@@ -36,16 +37,33 @@ class Game {
         return;
       }
 
-      stdout.write('\n다음 몬스터와 대결하시겠습니까? (y/n) : ');
-      String? answer = stdin.readLineSync();
-      if (answer == 'n') {
-        print('게임 종료');
-        stdout.write('용사님 결과를 저장하시겠습니까? (y/n) : ');
-        String? saveAnswer = stdin.readLineSync();
-        if (saveAnswer?.toLowerCase() == 'y') {
-          saveResult("중도 종료", character);
+      while (true) {
+        stdout.write('\n다음 몬스터와 대결하시겠습니까? (y/n) : ');
+        String? answer = stdin.readLineSync()?.toLowerCase();
+
+        if (answer == 'y') {
+          break; // 다음 전투로 진행
+        } else if (answer == 'n') {
+          print('게임 종료');
+          while (true) {
+            stdout.write('용사님 결과를 저장하시겠습니까? (y/n) : ');
+            String? saveAnswer = stdin.readLineSync()?.toLowerCase();
+            //  toLowerCase 대소문자 구분 없이 처리
+
+            if (saveAnswer == 'y') {
+              saveResult("중도 종료", character);
+              break;
+            } else if (saveAnswer == 'n') {
+              print('저장하지 않고 종료합니다.');
+              break;
+            } else {
+              print('y 또는 n만 입력해주세요!!');
+            }
+          }
+          return; // 게임 루프 종료
+        } else {
+          print('y 또는 n만 입력해주세요!!');
         }
-        return;
       }
     }
   }
@@ -56,7 +74,7 @@ class Game {
       monster.showState();
 
       // print('행동을 선택하세요: (1) 공격하기  (2) 방어하기');
-      stdout.write('행동을 선택하세요: ( (1) 공격하기  (2) 방어하기) 선택: ');
+      stdout.write('\n행동을 선택하세요: ( (1) 공격하기  (2) 방어하기 ) 선택: ');
       String? input = stdin.readLineSync();
 
       switch (input) {

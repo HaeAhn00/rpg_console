@@ -20,6 +20,6 @@ abstract class Entity {
 
   // 캐릭터 현재 상태
   void showState() {
-    print('[$name] 체력 :$health, 공격력 :$attack_p 방어력 :$defense_p');
+    print('\n[$name] 체력 :$health, 공격력 :$attack_p 방어력 :$defense_p');
   }
 }
