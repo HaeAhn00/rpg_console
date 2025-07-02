@@ -24,8 +24,22 @@ class Game {
 
       battle(monster);
 
-      if (character.health < 0) {
-        print('체력이 0, Game Over!');
+      if (character.health <= 0) {
+        print('체력이 0! GG~!');
+        while (true) {
+          stdout.write('용사님 결과를 저장하시겠습니까? (y/n) : ');
+          String? saveAnswer = stdin.readLineSync()?.toLowerCase();
+
+          if (saveAnswer == 'y') {
+            saveResult("패배", character);
+            break;
+          } else if (saveAnswer == 'n') {
+            print('저장하지 않고 종료합니다.');
+            break;
+          } else {
+            print('y 또는 n만 입력해주세요!!');
+          }
+        }
         return;
       }
 
