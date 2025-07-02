@@ -12,8 +12,17 @@ class Game {
 
   Game(this.character, this.monsterList);
 
+  final Random _random = Random();
+
   void startGame() {
     print('Game Start!');
+
+    double chance = _random.nextDouble();
+
+    if (chance < 0.3) {
+      character.health += 10;
+      print('보너스 체력을 얻었습니다! 현재 체력: ${character.health}');
+    }
     character.showState();
 
     while (character.health > 0 && killcount < totalMonsters) {
