@@ -91,19 +91,22 @@ class Game {
       stdout.write('\n행동을 선택하세요: ( (1) 공격하기  (2) 방어하기 ) 선택: ');
       String? input = stdin.readLineSync();
 
+      bool defended = false;
+
       switch (input) {
         case '1':
           character.attack(monster);
           break;
         case '2':
-          character.defend(monster.attack_p);
+          character.defend(monster);
+          defended = true;
           break;
         default:
           print('잘못된 입력입니다. 다시 입력 해주세요');
           continue;
       }
 
-      if (monster.health > 0) {
+      if (!defended && monster.health > 0) {
         monster.attack(character);
       }
     }
