@@ -73,7 +73,14 @@ class Game {
             battle(hiddenBoss);
             killcount++;
 
+            bool survived = battle(hiddenBoss);
+            if (!survived) {
+              print('\n🩸 히든 보스에게 패배했습니다...');
+              askToSave('패배');
+              return;
+            }
             // 히든 보스 승리 처리
+            killcount++;
             print('\n🎉 히든 보스 ${hiddenBoss.name} 처치! 완벽한 승리입니다!\n');
             askToSave('히든보스 격파');
             return;
@@ -106,13 +113,21 @@ class Game {
   }
 
   // 전투 메서드
-  void battle(Monster monster) {
+  bool battle(Monster monster) {
     // 각성 초기화
     character.hasAwakened = false;
     character.awakenedTurns = 0;
 
+    bool isFirstTurn = true;
+
     // 전투 루프
     while (character.health > 0 && monster.health > 0) {
+      if (!isFirstTurn) {
+        printMonsterAsciiArt(monster.name);
+        print('"${monster.battleCry}"');
+      }
+      isFirstTurn = false; // 첫 턴 이후부터는 출력됨
+
       character.showState();
       monster.showState();
       print(
@@ -151,6 +166,8 @@ class Game {
     }
 
     monsterList.remove(monster);
+
+    return character.health > 0;
   }
 
   // 랜덤 몬스터
@@ -190,6 +207,10 @@ class Game {
     '안귀엽소린': 'sorin.txt',
     '뽀뽀상록': 'sangrok.txt',
     '귀엽서연': 'seoyeon.txt',
+    '허스키비디오': 'vidio.txt',
+    '트랄라현수': 'hyeonsu.txt',
+    '도현짱': 'dohyeon.txt',
+    '에리얼가람': 'garam.txt',
   };
 
   // 히든 보스용 도트 파일 매핑
@@ -201,8 +222,9 @@ class Game {
   // 도트 아트 출력 함수
   void printMonsterAsciiArt(String monsterName, {bool isBoss = false}) {
     try {
-      final map = isBoss ? bossAsciiMap : asciiMap;
-      final filename = map[monsterName];
+      String? filename = asciiMap[monsterName] ?? bossAsciiMap[monsterName];
+      // final map = isBoss ? bossAsciiMap : asciiMap;
+      // final filename = map[monsterName];
       if (filename == null) {
         print('(⚠️ 도트 파일 없음)');
         return;
