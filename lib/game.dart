@@ -21,7 +21,7 @@ class Game {
     double chance = _random.nextDouble();
     if (chance < 0.3) {
       character.health += 10;
-      print('보너스 체력을 얻었습니다! 현재 체력: ${character.health}');
+      print('😎 보너스 체력을 얻었습니다! 현재 체력: ${character.health}');
     }
 
     character.showState();
@@ -29,11 +29,10 @@ class Game {
     while (character.health > 0 && killcount < totalMonsters) {
       Monster monster = getRandomMonster();
 
-      print('\n${monster.name} 등장 !!');
+      // monster.showState();
+      print('\n몬스터 : ${monster.name} 등장 !!');
       printMonsterAsciiArt(monster.name);
       print('"${monster.battleCry}"');
-
-      monster.showState();
 
       battle(monster);
 
@@ -116,6 +115,8 @@ class Game {
     while (character.health > 0 && monster.health > 0) {
       character.showState();
       monster.showState();
+      print(
+          '--------------------------------------------------------------------');
 
       stdout.write('\n행동을 선택하세요: ( (1) 공격하기  (2) 방어하기 (3) 각성 ) 선택: ');
       String? input = stdin.readLineSync();
