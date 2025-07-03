@@ -18,7 +18,7 @@ abstract class Entity {
     print('$name이(가) ${entity.name}에게 $damage 데미지를 입혔습니다.');
 
     if (entity is Monster) // entity가 monster일 경우에만 아래 호출
-      entity.increaseDefenseIfNeeded(); // ← 공격받을 때마다 턴 증가 및 방어력 체크
+      entity.increaseDefense(); // ← 공격받을 때마다 턴 증가 및 방어력 체크
   }
 
   void defend(Entity damage) {

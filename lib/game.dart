@@ -32,9 +32,10 @@ class Game {
       character.hasAwakened = false;
       character.isAwakenedNow = false;
 
-      print('\n새로운 몬스터가 등장 !!');
+      print('\n${monster.name} 등장 !!');
+      print('"${monster.battleCry}"');
+
       monster.showState();
-      // print('\n');
 
       battle(monster);
 
@@ -124,11 +125,11 @@ class Game {
       switch (input) {
         case '1':
           character.attack(monster);
-          monster.increaseDefenseIfNeeded();
+          monster.increaseDefense();
           break;
         case '2':
           character.defend(monster);
-          monster.increaseDefenseIfNeeded();
+          monster.increaseDefense();
           defended = true;
           break;
         case '3':
