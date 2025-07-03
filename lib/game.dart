@@ -17,20 +17,21 @@ class Game {
   void startGame() {
     print('Game Start!');
 
+    // 30% 확률로 보너스 체력
     double chance = _random.nextDouble();
-
     if (chance < 0.3) {
       character.health += 10;
       print('보너스 체력을 얻었습니다! 현재 체력: ${character.health}');
     }
+
     character.showState();
 
     while (character.health > 0 && killcount < totalMonsters) {
       Monster monster = getRandomMonster();
 
       // 다음 몬스터와 대결할 때 각성 초기화!!!
-      character.hasAwakened = false;
-      character.isAwakenedNow = false;
+      // character.hasAwakened = false;
+      // character.awakenedTurns = 2;
 
       print('\n${monster.name} 등장 !!');
       print('"${monster.battleCry}"');
@@ -40,7 +41,7 @@ class Game {
       battle(monster);
 
       if (character.health <= 0) {
-        print('체력이 0! GG~!');
+        print('체력이 0.. GG..');
         while (true) {
           stdout.write('용사님 결과를 저장하시겠습니까? (y/n) : ');
           String? saveAnswer = stdin.readLineSync()?.toLowerCase();
@@ -113,6 +114,8 @@ class Game {
   }
 
   void battle(Monster monster) {
+    character.hasAwakened = false;
+    character.awakenedTurns = 0;
     while (character.health > 0 && monster.health > 0) {
       character.showState();
       monster.showState();
@@ -139,10 +142,13 @@ class Game {
           print('잘못된 입력입니다. 다시 입력 해주세요');
           continue;
       }
-
-      //  방어를 하지 않거나 몹이 살아있으면 반격하기
+      // 각성 상태 & 방어 시 몬스터 공격 X
       if (!defended && monster.health > 0) {
-        monster.attack(character);
+        if (character.awakenedTurns > 0) {
+          print('${character.name}의 각성 기운에 눌려 ${monster.name}이(가) 공격 불능 상태!');
+        } else {
+          monster.attack(character);
+        }
       }
     }
 
