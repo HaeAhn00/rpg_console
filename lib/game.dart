@@ -212,7 +212,7 @@ class Game {
       final art = file.readAsStringSync();
       print(art);
     } catch (e) {
-      print('❌ 몬스터 아트 파일을 불러올 수 없습니다: $e');
+      print('❌ 몬스터 도트 파일을 불러올 수 없습니다: $e');
     }
   }
 }
