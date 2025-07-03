@@ -29,4 +29,15 @@ class Monster extends Entity {
       exit(1);
     }
   }
+
+  int turnCount = 0; // 몬스터가 받은 공격 턴 수 추적
+
+  void increaseDefenseIfNeeded() {
+    turnCount++;
+    if (turnCount % 3 == 0) {
+      defense_p += 2;
+      print('$name의 방어력이 증가했습니다! 현재 방어력: $defense_p');
+      turnCount = 0;
+    }
+  }
 }

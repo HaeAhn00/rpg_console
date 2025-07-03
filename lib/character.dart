@@ -42,4 +42,33 @@ class Character extends Entity {
       exit(1);
     }
   }
+
+  bool hasAwakened = false;
+  bool isAwakenedNow = false;
+
+  void awaken() {
+    if (hasAwakened) {
+      print('\n이미 각성했습니다. 이 힘은 두 번 쓸 수 없다...');
+    } else {
+      isAwakenedNow = true;
+      hasAwakened = true;
+      print('\n이런 걸로는 쓰러지지 않는다!!!!!!!!!!!!!');
+      print('$name이(가) 각성했다!💪 이번 턴, 공격력이 두 배로 증가합니다!');
+    }
+  }
+
+  @override
+  void attack(Entity entity) {
+    int effectiveAttack = isAwakenedNow ? attack_p * 2 : attack_p;
+    int damage = effectiveAttack - entity.defense_p;
+    if (damage < 1) damage = 1;
+
+    entity.health -= damage;
+    print('$name이(가) ${entity.name}에게 $damage 데미지를 입혔습니다.');
+
+    if (entity.health < 0) entity.health = 0;
+
+    // 각성 효과는 한 턴만 지속
+    isAwakenedNow = false;
+  }
 }

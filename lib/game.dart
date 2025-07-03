@@ -27,6 +27,11 @@ class Game {
 
     while (character.health > 0 && killcount < totalMonsters) {
       Monster monster = getRandomMonster();
+
+      // 다음 몬스터와 대결할 때 각성 초기화!!!
+      character.hasAwakened = false;
+      character.isAwakenedNow = false;
+
       print('\n새로운 몬스터가 등장 !!');
       monster.showState();
       // print('\n');
@@ -111,8 +116,7 @@ class Game {
       character.showState();
       monster.showState();
 
-      // print('행동을 선택하세요: (1) 공격하기  (2) 방어하기');
-      stdout.write('\n행동을 선택하세요: ( (1) 공격하기  (2) 방어하기 ) 선택: ');
+      stdout.write('\n행동을 선택하세요: ( (1) 공격하기  (2) 방어하기 (3) 각성 ) 선택: ');
       String? input = stdin.readLineSync();
 
       bool defended = false;
@@ -120,16 +124,22 @@ class Game {
       switch (input) {
         case '1':
           character.attack(monster);
+          monster.increaseDefenseIfNeeded();
           break;
         case '2':
           character.defend(monster);
+          monster.increaseDefenseIfNeeded();
           defended = true;
+          break;
+        case '3':
+          character.awaken();
           break;
         default:
           print('잘못된 입력입니다. 다시 입력 해주세요');
           continue;
       }
 
+      //  방어를 하지 않거나 몹이 살아있으면 반격하기
       if (!defended && monster.health > 0) {
         monster.attack(character);
       }
