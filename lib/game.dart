@@ -14,6 +14,7 @@ class Game {
 
   final Random _random = Random();
 
+  // 게임 시작 메서드
   void startGame() {
     print('Game Start!');
 
@@ -24,18 +25,20 @@ class Game {
       print('😎 보너스 체력을 얻었습니다! 현재 체력: ${character.health}');
     }
 
-    character.showState();
+    character.showState(); // 캐릭터 상태 출력
 
     while (character.health > 0 && killcount < totalMonsters) {
       Monster monster = getRandomMonster();
 
-      // monster.showState();
+      // 몬스터 등장 두둥탁!
       print('\n몬스터 : ${monster.name} 등장 !!');
       printMonsterAsciiArt(monster.name);
       print('"${monster.battleCry}"');
 
+      // 전투 시작
       battle(monster);
 
+      // 패배 처리
       if (character.health <= 0) {
         print('체력이 0.. GG..');
         while (true) {
@@ -58,6 +61,7 @@ class Game {
       killcount++;
       print('${monster.name} 처치 완료!! ${killcount}/${totalMonsters}');
 
+      // 승리 처리
       if (killcount == totalMonsters) {
         print('모든 몬스터 처지 완료! Game Clear!');
 
@@ -74,10 +78,10 @@ class Game {
             print('y 또는 n만 입력해주세요!!');
           }
         }
-
         return;
       }
 
+      // 다음 몬스터와 대결할지 묻기
       while (true) {
         stdout.write('\n다음 몬스터와 대결하시겠습니까? (y/n) : ');
         String? answer = stdin.readLineSync()?.toLowerCase();
@@ -101,7 +105,7 @@ class Game {
               print('y 또는 n만 입력해주세요!!');
             }
           }
-          return; // 게임 루프 종료
+          return;
         } else {
           print('y 또는 n만 입력해주세요!!');
         }
@@ -109,9 +113,13 @@ class Game {
     }
   }
 
+  // 전투 메서드
   void battle(Monster monster) {
+    // 각성 초기화
     character.hasAwakened = false;
     character.awakenedTurns = 0;
+
+    // 전투 루프
     while (character.health > 0 && monster.health > 0) {
       character.showState();
       monster.showState();
@@ -153,10 +161,12 @@ class Game {
     monsterList.remove(monster);
   }
 
+  // 랜덤 몬스터
   Monster getRandomMonster() {
     return monsterList[Random().nextInt(monsterList.length)];
   }
 
+  // 게임 결과 저장
   void saveResult(String result, Character character) {
     final file = File('result.txt');
     final content =

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:rpg_console/entity.dart';
 // import 'package:rpg_console/monster.dart';
 
+// 캐릭터 클래스 - Entity를 상속받아 사용자 캐릭터 정의
 class Character extends Entity {
   Character(super.name, super.health, super.attack_p, super.defense_p);
 
@@ -22,7 +23,7 @@ class Character extends Entity {
     }
   }
 
-  // 텍스트 파일에서 캐릭터 스텟 불러오기, 사용자 이름과 함께 캐릭터 객체 생성
+  // 캐릭터 능력치를 텍스트 파일로부터 불러와 캐릭터 인스턴스를 생성
   static Character loadCharacterStats() {
     try {
       final file = File('../assets/characters.txt');
@@ -46,6 +47,8 @@ class Character extends Entity {
   int awakenedTurns = 0;
   bool hasAwakened = false;
 
+  // 각성 기능 - 한 번만 사용 가능
+  // - 효과: 2턴간 공격력 2배 & 몬스터 공격 차단
   void awaken() {
     if (hasAwakened) {
       print('\n이미 각성했습니다. 이 힘은 두 번 쓸 수 없다...');
@@ -57,6 +60,9 @@ class Character extends Entity {
     }
   }
 
+  // 공격 메서드 - 각성 상태일 경우 데미지 2배
+  // - 최소 데미지: 1
+  // - 공격 후 각성 턴 감소
   @override
   void attack(Entity entity) {
     int effectiveAttack = awakenedTurns > 0 ? attack_p * 2 : attack_p;
@@ -68,6 +74,6 @@ class Character extends Entity {
 
     print('$name이(가) ${entity.name}에게 $damage 데미지를 입혔습니다.');
 
-    if (awakenedTurns > 0) awakenedTurns--;
+    if (awakenedTurns > 0) awakenedTurns--; // 턴 소모
   }
 }

@@ -3,8 +3,11 @@ import 'dart:io';
 // import 'package:rpg_console/character.dart';
 import 'package:rpg_console/entity.dart';
 
+// 몬스터 클래스 - Entity 추상 클래스를 상속
 class Monster extends Entity {
-  final String battleCry;
+  final String battleCry; // 등장 대사
+
+  // 생성자: 공격력은 attack_Max_p까지의 랜덤값으로 지정
   Monster(
       String name, int health, int attack_Max_p, int defense_p, this.battleCry)
       : super(name, health, Random().nextInt(attack_Max_p) + 1, defense_p);
