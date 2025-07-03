@@ -7,6 +7,9 @@ import 'package:rpg_console/monster.dart';
 class Game {
   Character character;
   List<Monster> monsterList;
+  late Monster hiddenBoss;
+  bool bossMode = false;
+
   int killcount = 0;
   late int totalMonsters = monsterList.length;
 
@@ -41,44 +44,47 @@ class Game {
       // 패배 처리
       if (character.health <= 0) {
         print('체력이 0.. GG..');
-        while (true) {
-          stdout.write('용사님 결과를 저장하시겠습니까? (y/n) : ');
-          String? saveAnswer = stdin.readLineSync()?.toLowerCase();
-
-          if (saveAnswer == 'y') {
-            saveResult("패배", character);
-            break;
-          } else if (saveAnswer == 'n') {
-            print('저장하지 않고 종료합니다.');
-            break;
-          } else {
-            print('y 또는 n만 입력해주세요!!');
-          }
-        }
+        askToSave('패배');
         return;
       }
 
       killcount++;
       print('${monster.name} 처치 완료!! ${killcount}/${totalMonsters}');
 
-      // 승리 처리
-      if (killcount == totalMonsters) {
-        print('모든 몬스터 처지 완료! Game Clear!');
-
+      // 히든 보스 도전 여부
+      if (killcount == totalMonsters && !bossMode) {
         while (true) {
-          stdout.write('용사님 결과를 저장하시겠습니까? (y/n) : ');
-          String? answer = stdin.readLineSync();
+          stdout.write('\n⚔️ 히든 보스와 싸우시겠습니까? (y/n): ');
+          String? answer = stdin.readLineSync()?.toLowerCase();
+
           if (answer == 'y') {
-            saveResult('승리', character);
-            break;
+            // 히든 보스 로드 50% 확률로 선택됨
+            List<Monster> bossList = Monster.loadBossesFromFile();
+            hiddenBoss = bossList[Random().nextInt(bossList.length)];
+
+            monsterList.add(hiddenBoss);
+            totalMonsters += 1;
+            bossMode = true;
+
+            print('\n🌑 히든 보스 ${hiddenBoss.name} 등장!');
+            printMonsterAsciiArt(hiddenBoss.name, isBoss: true);
+            print('"${hiddenBoss.battleCry}"');
+
+            battle(hiddenBoss);
+            killcount++;
+
+            // 히든 보스 승리 처리
+            print('\n🎉 히든 보스 ${hiddenBoss.name} 처치! 완벽한 승리입니다!\n');
+            askToSave('히든보스 격파');
+            return;
           } else if (answer == 'n') {
-            print('저장하지 않고 게임을 종료합니다.');
-            break;
+            print('\n게임 종료!');
+            askToSave('게임 클리어..?');
+            return;
           } else {
             print('y 또는 n만 입력해주세요!!');
           }
         }
-        return;
       }
 
       // 다음 몬스터와 대결할지 묻기
@@ -86,25 +92,11 @@ class Game {
         stdout.write('\n다음 몬스터와 대결하시겠습니까? (y/n) : ');
         String? answer = stdin.readLineSync()?.toLowerCase();
 
-        if (answer == 'y') {
-          break; // 다음 전투로 진행
-        } else if (answer == 'n') {
+        if (answer == 'y')
+          break;
+        else if (answer == 'n') {
           print('게임 종료');
-          while (true) {
-            stdout.write('용사님 결과를 저장하시겠습니까? (y/n) : ');
-            String? saveAnswer = stdin.readLineSync()?.toLowerCase();
-            //  toLowerCase 대소문자 구분 없이 처리
-
-            if (saveAnswer == 'y') {
-              saveResult("중도 종료", character);
-              break;
-            } else if (saveAnswer == 'n') {
-              print('저장하지 않고 종료합니다.');
-              break;
-            } else {
-              print('y 또는 n만 입력해주세요!!');
-            }
-          }
+          askToSave('중도 종료');
           return;
         } else {
           print('y 또는 n만 입력해주세요!!');
@@ -175,6 +167,24 @@ class Game {
     print('결과가 result.txt에 저장되었습니다.');
   }
 
+  // 결과 저장 여부 묻기
+  void askToSave(String result) {
+    while (true) {
+      stdout.write('용사님 결과를 저장하시겠습니까? (y/n) : ');
+      String? saveAnswer = stdin.readLineSync()?.toLowerCase();
+
+      if (saveAnswer == 'y') {
+        saveResult(result, character);
+        break;
+      } else if (saveAnswer == 'n') {
+        print('저장하지 않고 종료합니다.');
+        break;
+      } else {
+        print('y 또는 n만 입력해주세요!!');
+      }
+    }
+  }
+
   // 이름-파일 매핑 딕셔너리
   Map<String, String> asciiMap = {
     '안귀엽소린': 'sorin.txt',
@@ -182,10 +192,17 @@ class Game {
     '귀엽서연': 'seoyeon.txt',
   };
 
+  // 히든 보스용 도트 파일 매핑
+  Map<String, String> bossAsciiMap = {
+    'EZ_No.1': 'EZ_1.txt',
+    '쌉T': 'ssap_T.txt',
+  };
+
   // 도트 아트 출력 함수
-  void printMonsterAsciiArt(String monsterName) {
+  void printMonsterAsciiArt(String monsterName, {bool isBoss = false}) {
     try {
-      final filename = asciiMap[monsterName];
+      final map = isBoss ? bossAsciiMap : asciiMap;
+      final filename = map[monsterName];
       if (filename == null) {
         print('(⚠️ 도트 파일 없음)');
         return;

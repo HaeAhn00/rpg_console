@@ -36,6 +36,30 @@ class Monster extends Entity {
     }
   }
 
+  // 히든 보스
+  static List<Monster> loadBossesFromFile() {
+    try {
+      final file = File('../assets/bosses.txt');
+      final lines = file.readAsLinesSync();
+
+      return lines.map((line) {
+        final parts = line.split(',');
+        if (parts.length != 4)
+          throw FormatException('Invalid boss data: $line');
+
+        String name = parts[0].trim();
+        int health = int.parse(parts[1].trim());
+        int attackMax = int.parse(parts[2].trim());
+        String battleCry = parts[3].trim();
+
+        return Monster(name, health, attackMax, 0, battleCry);
+      }).toList();
+    } catch (e) {
+      print('보스 데이터를 불러오는 데 실패했습니다: $e');
+      exit(1);
+    }
+  }
+
   int turnCount = 0; // 몬스터가 받은 공격 턴 수 추적
 
   void increaseDefense() {
