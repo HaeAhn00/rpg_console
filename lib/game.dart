@@ -29,11 +29,8 @@ class Game {
     while (character.health > 0 && killcount < totalMonsters) {
       Monster monster = getRandomMonster();
 
-      // 다음 몬스터와 대결할 때 각성 초기화!!!
-      // character.hasAwakened = false;
-      // character.awakenedTurns = 2;
-
       print('\n${monster.name} 등장 !!');
+      printMonsterAsciiArt(monster.name);
       print('"${monster.battleCry}"');
 
       monster.showState();
@@ -165,5 +162,29 @@ class Game {
         '캐릭터 이름: ${character.name}\n남은 체력: ${character.health}\n게임 결과: $result\n';
     file.writeAsStringSync(content);
     print('결과가 result.txt에 저장되었습니다.');
+  }
+
+  // 이름-파일 매핑 딕셔너리
+  Map<String, String> asciiMap = {
+    '안귀엽소린': 'sorin.txt',
+    '뽀뽀상록': 'sangrok.txt',
+    '귀엽서연': 'seoyeon.txt',
+  };
+
+  // 도트 아트 출력 함수
+  void printMonsterAsciiArt(String monsterName) {
+    try {
+      final filename = asciiMap[monsterName];
+      if (filename == null) {
+        print('(⚠️ 도트 파일 없음)');
+        return;
+      }
+
+      final file = File('../assets/$filename');
+      final art = file.readAsStringSync();
+      print(art);
+    } catch (e) {
+      print('❌ 몬스터 아트 파일을 불러올 수 없습니다: $e');
+    }
   }
 }
