@@ -19,7 +19,9 @@ class Game {
 
   // 게임 시작 메서드
   void startGame() {
-    print('Game Start!');
+    print('\n================================================================'
+        '\n========================DOT RPG OFFLINE========================='
+        '\n================================================================\n');
 
     // 30% 확률로 보너스 체력
     double chance = _random.nextDouble();
@@ -212,7 +214,8 @@ class Game {
     '도현짱': 'dohyeon.txt',
     '에리얼가람': 'garam.txt',
     '원딜레이': 'onedelay.txt',
-    '성호공': 'sunghoon.txt'
+    '성호공': 'sunghoon.txt',
+    '변의커비': 'westno1.txt',
   };
 
   // 히든 보스용 도트 파일 매핑
