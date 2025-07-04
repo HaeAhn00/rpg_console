@@ -36,7 +36,7 @@ class Game {
       // 몬스터 등장 두둥탁!
       print('\n몬스터 : ${monster.name} 등장 !!');
       printMonsterAsciiArt(monster.name);
-      print('"${monster.battleCry}"');
+      print('\n"${monster.battleCry}"');
 
       // 전투 시작
       battle(monster);
@@ -68,7 +68,7 @@ class Game {
 
             print('\n🌑 히든 보스 ${hiddenBoss.name} 등장!');
             printMonsterAsciiArt(hiddenBoss.name, isBoss: true);
-            print('"${hiddenBoss.battleCry}"');
+            print('\n"${hiddenBoss.battleCry}"');
 
             battle(hiddenBoss);
             killcount++;
@@ -124,7 +124,7 @@ class Game {
     while (character.health > 0 && monster.health > 0) {
       if (!isFirstTurn) {
         printMonsterAsciiArt(monster.name);
-        print('"${monster.battleCry}"');
+        print('\n"${monster.battleCry}"');
       }
       isFirstTurn = false; // 첫 턴 이후부터는 출력됨
 
