@@ -208,9 +208,11 @@ class Game {
     '뽀뽀상록': 'sangrok.txt',
     '귀엽서연': 'seoyeon.txt',
     '허스키비디오': 'vidio.txt',
-    '트랄라현수': 'hyeonsu.txt',
+    '현수노우맨': 'hyeonsu.txt',
     '도현짱': 'dohyeon.txt',
     '에리얼가람': 'garam.txt',
+    '원딜레이': 'onedelay.txt',
+    '성호공': 'sunghoon.txt'
   };
 
   // 히든 보스용 도트 파일 매핑
